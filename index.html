@@ -1,1 +1,96 @@
-<h1>Testando Benildo Ubuntu</h1>
+let perguntas = [
+  {
+    pergunta: "Qual a cor do céu em um dia limpo?",
+    respostaCorreta: "azul",
+    respostaDada: ""
+  },
+  {
+    pergunta: "Quantos continentes existem no mundo?",
+    respostaCorreta: "7",
+    respostaDada: ""
+  },
+  {
+    pergunta: "Qual é a capital da França?",
+    respostaCorreta: "Paris",
+    respostaDada: ""
+  }
+];
+
+let perguntaAtual = 0;
+let respostaInput;
+
+function setup() {
+  createCanvas(400, 400);
+  textSize(18);
+  textAlign(CENTER, CENTER);
+
+  // Cria um campo de texto para a resposta
+  respostaInput = createInput();
+  respostaInput.position(100, 300);
+  respostaInput.size(200);
+  
+  let botao = createButton("Responder");
+  botao.position(150, 350);
+  botao.mousePressed(proximaPergunta);
+
+  // Exibe a primeira pergunta
+  exibirPergunta();
+}
+
+function draw() {
+  background(240);
+  
+  // Exibe a pergunta atual
+  text(perguntas[perguntaAtual].pergunta, width / 2, height / 4);
+  
+  // Exibe a pontuação
+  let pontuacao = calcularPontuacao();
+  text("Pontuação: " + pontuacao + "/" + perguntas.length, width / 2, height - 50);
+}
+
+function exibirPergunta() {
+  let pergunta = perguntas[perguntaAtual].pergunta;
+  text(pergunta, width / 2, height / 4);
+}
+
+function proximaPergunta() {
+  // Verifica a resposta dada
+  let resposta = respostaInput.value().trim().toLowerCase();
+  
+  // Armazena a resposta do usuário
+  perguntas[perguntaAtual].respostaDada = resposta;
+  
+  // Se não for a última pergunta, passa para a próxima
+  perguntaAtual++;
+  
+  if (perguntaAtual < perguntas.length) {
+    // Atualiza a exibição para a próxima pergunta
+    exibirPergunta();
+  } else {
+    // Se acabou, mostra o resultado final
+    noLoop(); // Interrompe o loop de draw()
+    exibirResultado();
+  }
+  
+  // Limpa o campo de resposta
+  respostaInput.value('');
+}
+
+function calcularPontuacao() {
+  let pontuacao = 0;
+  
+  for (let i = 0; i < perguntas.length; i++) {
+    if (perguntas[i].respostaDada.toLowerCase() === perguntas[i].respostaCorreta.toLowerCase()) {
+      pontuacao++;
+    }
+  }
+  
+  return pontuacao;
+}
+
+function exibirResultado() {
+  let pontuacao = calcularPontuacao();
+  textSize(24);
+  text("Fim do teste!", width / 2, height / 4);
+  text("Sua pontuação: " + pontuacao + "/" + perguntas.length, width / 2, height / 2);
+}
