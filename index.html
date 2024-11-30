@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barra de Progresso</title>
+    <title>Ative Botões com QR Code</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Barra de Progresso</h1>
+        <h1>Ative Botões com QR Code</h1>
         
-        <!-- Barra de Progresso -->
+        <!-- Barra de Progresso Horizontal -->
         <div class="progress-container">
             <div class="progress-bar" id="progressBar"></div>
         </div>
 
-        <!-- Botões -->
-        <div class="buttons">
-            <button class="progress-btn" onclick="increaseProgress()">Botão 1</button>
-            <button class="progress-btn" onclick="increaseProgress()">Botão 2</button>
-            <button class="progress-btn" onclick="increaseProgress()">Botão 3</button>
-            <button class="progress-btn" onclick="increaseProgress()">Botão 4</button>
-            <button class="progress-btn" onclick="increaseProgress()">Botão 5</button>
+        <!-- Botões e QR Codes lado a lado -->
+        <div class="row">
+            <div class="buttons">
+                <button class="progress-btn" id="button1" onclick="increaseProgress(this)">Botão 1</button>
+                <button class="progress-btn" id="button2" onclick="increaseProgress(this)">Botão 2</button>
+                <button class="progress-btn" id="button3" onclick="increaseProgress(this)">Botão 3</button>
+                <button class="progress-btn" id="button4" onclick="increaseProgress(this)">Botão 4</button>
+                <button class="progress-btn" id="button5" onclick="increaseProgress(this)">Botão 5</button>
+            </div>
+
+            <!-- QR Codes -->
+            <div class="qr-codes">
+                <div class="qr-code" id="qr1"></div>
+                <div class="qr-code" id="qr2"></div>
+                <div class="qr-code" id="qr3"></div>
+                <div class="qr-code" id="qr4"></div>
+                <div class="qr-code" id="qr5"></div>
+            </div>
+        </div>
+
+        <!-- Botão de Reset -->
+        <div class="reset-container">
+            <button class="reset-btn" onclick="resetProgress()">Resetar Progresso</button>
         </div>
     </div>
 
