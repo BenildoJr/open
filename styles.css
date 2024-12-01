@@ -21,7 +21,7 @@ body {
 .container {
     text-align: center;
     width: 100%;
-    max-width: 1200px; /* Limite de largura máxima */
+    max-width: 1200px; 
     padding: 20px;
 }
 
