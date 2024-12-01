@@ -1,44 +1,51 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ative Botões com QR Code</title>
+    <title>1ª Tech&Vida - Visitação de Projetos</title>
+    <h3>Leia todos os QRCodes para votar</h3>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Ative Botões com QR Code</h1>
-        
-        <!-- Barra de Progresso Horizontal -->
+        <h1>Feira de Tecnologia</h1>
         <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
+            <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        
+        <div class="buttons">
+            <button id="button1" class="progress-btn">Botão 1</button>
+            <button id="button2" class="progress-btn">Botão 2</button>
+            <button id="button3" class="progress-btn">Botão 3</button>
+            <button id="button4" class="progress-btn">Botão 4</button>
+            <button id="button5" class="progress-btn">Botão 5</button>
         </div>
 
-        <!-- Botões e QR Codes lado a lado -->
-        <div class="row">
-            <div class="buttons">
-                <button class="progress-btn" id="button1" onclick="increaseProgress(this)">Botão 1</button>
-                <button class="progress-btn" id="button2" onclick="increaseProgress(this)">Botão 2</button>
-                <button class="progress-btn" id="button3" onclick="increaseProgress(this)">Botão 3</button>
-                <button class="progress-btn" id="button4" onclick="increaseProgress(this)">Botão 4</button>
-                <button class="progress-btn" id="button5" onclick="increaseProgress(this)">Botão 5</button>
+        <div class="qr-codes">
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?data=http://localhost/button1" alt="QR Code Botão 1">
             </div>
-
-            <!-- QR Codes -->
-            <div class="qr-codes">
-                <div class="qr-code" id="qr1"></div>
-                <div class="qr-code" id="qr2"></div>
-                <div class="qr-code" id="qr3"></div>
-                <div class="qr-code" id="qr4"></div>
-                <div class="qr-code" id="qr5"></div>
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?data=http://localhost/button2" alt="QR Code Botão 2">
+            </div>
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?data=http://localhost/button3" alt="QR Code Botão 3">
+            </div>
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?data=http://localhost/button4" alt="QR Code Botão 4">
+            </div>
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?data=http://localhost/button5" alt="QR Code Botão 5">
             </div>
         </div>
 
-        <!-- Botão de Reset -->
         <div class="reset-container">
-            <button class="reset-btn" onclick="resetProgress()">Resetar Progresso</button>
+            <button id="resetBtn" class="reset-btn">Resetar Progresso</button>
+        </div>
+
+        <div class="voting-container">
+            <button id="votingBtn" class="voting-btn" disabled>Avalie os Projeto</button>
         </div>
     </div>
 

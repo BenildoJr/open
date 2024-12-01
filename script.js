@@ -1,108 +1,111 @@
-let progress = 0; // Variável para controlar o progresso
-const buttonIds = ['button1', 'button2', 'button3', 'button4', 'button5']; // IDs dos botões
-
-// Função para aumentar o progresso
-function increaseProgress(button) {
-    if (progress < 100 && !button.disabled) {
-        progress += 20; // Aumenta 20% por clique
-        updateProgressBar(); // Atualiza a barra de progresso
-        button.disabled = true; // Desabilita o botão clicado
-        saveButtonState(button.id, true); // Salva o estado do botão (pressionado)
-    }
-
-    // Desativa todos os botões se a barra chegar a 100%
-    if (progress === 100) {
-        disableAllButtons();
-    }
-}
-
-// Função para atualizar a barra de progresso
+// Função para atualizar a barra de progresso com base na porcentagem
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    progressBar.style.width = progress + '%'; // Altera a largura da barra de progresso
+    const progress = localStorage.getItem('progress') || 0;  // Pega o progresso salvo no localStorage
+    progressBar.style.width = `${progress}%`;  // Atualiza a largura da barra com o valor de progresso
+    progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
 }
 
-// Função para desabilitar todos os botões
-function disableAllButtons() {
-    const buttons = document.querySelectorAll('.progress-btn');
-    buttons.forEach(button => {
-        button.disabled = true;
-    });
-}
-
-// Função para gerar QR Codes para cada botão
-function generateQRCode(buttonId) {
-    // A URL única para cada botão será algo como: http://localhost/button1
-    const url = `${window.location.origin}/${buttonId}`; // Usa o domínio atual (localhost ou servidor)
-    
-    QRCode.toDataURL(url, function (err, url) {
-        if (err) {
-            console.error(err);
-        } else {
-            // Gera o QR Code para o botão com o id correspondente
-            document.getElementById('qr' + buttonId.replace('button', '')).innerHTML = `<img src="${url}" alt="QR Code">`;
-        }
-    });
-}
-
-// Função para salvar o estado do botão (pressionado) no localStorage
-function saveButtonState(buttonId, state) {
-    localStorage.setItem(buttonId, state); // Armazena o estado do botão (true ou false)
-}
-
-// Função para carregar o estado dos botões e atualizar a interface
-function loadButtonStates() {
-    buttonIds.forEach(buttonId => {
-        const state = localStorage.getItem(buttonId); // Recupera o estado do localStorage
-        const button = document.getElementById(buttonId);
-        
-        if (state === 'true') {
-            button.disabled = true; // Desabilita o botão se já foi pressionado
-            progress += 20; // Aumenta a barra de progresso
-        }
-    });
-    updateProgressBar(); // Atualiza a barra de progresso com o valor atual
-}
-
-// Função para ativar o botão a partir da URL
-function activateButtonFromUrl(url) {
-    const buttonId = url.split('/').pop(); // Extrai o ID do botão da URL
+// Função para atualizar o estado de cada botão
+function updateButtonState(buttonId, isClicked) {
     const button = document.getElementById(buttonId);
-
-    if (button && !button.disabled) {
-        increaseProgress(button); // Simula o clique no botão
+    if (isClicked) {
+        button.disabled = true;  // Desabilita o botão
+        button.style.backgroundColor = '#ccc'; // Muda a cor de fundo para indicar que está desabilitado
+    } else {
+        button.disabled = false; // Habilita o botão
+        button.style.backgroundColor = '#4caf50'; // Restaura a cor de fundo do botão
     }
 }
 
-// Função para tratar a leitura do QR Code
-window.onload = function() {
-    // Carrega os estados dos botões ao carregar a página
-    loadButtonStates();
+// Função para registrar a ação de um botão
+function handleButtonClick(buttonId) {
+    const currentProgress = parseInt(localStorage.getItem('progress') || 0);
+    if (currentProgress < 100) {
+        const newProgress = currentProgress + 20; // A cada clique, a barra sobe 20%
+        localStorage.setItem('progress', newProgress); // Salva o novo valor de progresso
+        updateProgressBar(); // Atualiza a barra de progresso
 
-    const currentUrl = window.location.href;
-    const urlParams = new URLSearchParams(window.location.search);
-    const buttonId = urlParams.get('button'); // A URL terá um parâmetro ?button=button1, por exemplo
-
-    if (buttonId) {
-        activateButtonFromUrl(currentUrl); // Ativa o botão com base no QR Code lido
+        // Marca o botão como clicado
+        localStorage.setItem(buttonId, 'clicked');
+        updateButtonState(buttonId, true);
     }
-};
 
-// Gera os QR Codes para todos os botões
-buttonIds.forEach(buttonId => generateQRCode(buttonId));
+    // Verifica se a barra de progresso está completa
+    if (parseInt(localStorage.getItem('progress') || 0) === 100) {
+        enableVotingButton();  // Habilita o botão de votação
+    }
+}
 
-// Função para resetar o progresso e os botões
+// Função para habilitar o botão de votação
+function enableVotingButton() {
+    const votingButton = document.getElementById('votingBtn');
+    votingButton.disabled = false;
+    votingButton.style.backgroundColor = '#2196f3'; // Muda a cor para azul quando habilitado
+}
+
+// Função para reiniciar o progresso
 function resetProgress() {
-    // Zera o progresso
-    progress = 0;
+    localStorage.setItem('progress', 0);  // Zera o progresso
+    updateProgressBar();  // Atualiza a barra de progresso
+    localStorage.removeItem('button1');
+    localStorage.removeItem('button2');
+    localStorage.removeItem('button3');
+    localStorage.removeItem('button4');
+    localStorage.removeItem('button5');
+    
+    // Reabilita todos os botões
+    for (let i = 1; i <= 5; i++) {
+        updateButtonState(`button${i}`, false);
+    }
+
+    // Desabilita o botão de votação
+    const votingButton = document.getElementById('votingBtn');
+    votingButton.disabled = true;
+    votingButton.style.backgroundColor = '#ccc';
+}
+
+// Função para simular o clique do botão através do QR code
+function handleQRCodeScan(buttonId) {
+    if (!localStorage.getItem(buttonId)) {
+        handleButtonClick(buttonId);
+    }
+}
+
+// Verifica o estado dos botões ao carregar a página
+function initialize() {
+    // Atualiza a barra de progresso
     updateProgressBar();
 
-    // Habilita todos os botões novamente
-    const buttons = document.querySelectorAll('.progress-btn');
-    buttons.forEach(button => {
-        button.disabled = false;
-    });
+    // Verifica o estado de cada botão
+    for (let i = 1; i <= 5; i++) {
+        const isClicked = localStorage.getItem(`button${i}`) === 'clicked';
+        updateButtonState(`button${i}`, isClicked);
+    }
 
-    // Limpa o localStorage (reseta os estados dos botões)
-    localStorage.clear();
+    // Habilita o botão de votação se o progresso for 100%
+    if (parseInt(localStorage.getItem('progress') || 0) === 100) {
+        enableVotingButton();
+    }
 }
+
+// Função para redirecionar para o formulário de votação do Google Forms
+function vote() {
+    window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfkABb7ihtrT19LHMEqOy4vVXWpfGF7Fd2w-gmBxqKadJvHQA/viewform';
+}
+
+// Inicializa a página ao carregar
+window.onload = initialize;
+
+// Adiciona os ouvintes de evento para os botões
+document.getElementById('button1').addEventListener('click', () => handleButtonClick('button1'));
+document.getElementById('button2').addEventListener('click', () => handleButtonClick('button2'));
+document.getElementById('button3').addEventListener('click', () => handleButtonClick('button3'));
+document.getElementById('button4').addEventListener('click', () => handleButtonClick('button4'));
+document.getElementById('button5').addEventListener('click', () => handleButtonClick('button5'));
+
+// Adiciona o ouvinte de evento para o botão de reset
+document.getElementById('resetBtn').addEventListener('click', resetProgress);
+
+// Adiciona o ouvinte de evento para o botão de votação
+document.getElementById('votingBtn').addEventListener('click', vote);
