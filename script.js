@@ -3,6 +3,15 @@ let progress = localStorage.getItem('progress') ? parseInt(localStorage.getItem(
 const progressBar = document.getElementById('progressBar');
 const votingBtn = document.getElementById('votingBtn');
 
+// Definindo os QR Codes e o valor que cada um adiciona ao progresso
+const qrCodes = [
+    { id: 'qr1', value: 20 },
+    { id: 'qr2', value: 25 },
+    { id: 'qr3', value: 15 },
+    { id: 'qr4', value: 25 },
+    { id: 'qr5', value: 15 }
+];
+
 // Função para atualizar a barra de progresso
 function updateProgressBar() {
     progressBar.style.width = progress + '%';
@@ -13,19 +22,51 @@ function updateProgressBar() {
     }
 }
 
+// Função para armazenar no localStorage os QR Codes lidos
+function storeQrCodeRead(qrCodeId) {
+    let qrCodesRead = JSON.parse(localStorage.getItem('qrCodesRead')) || [];
+    if (!qrCodesRead.includes(qrCodeId)) {
+        qrCodesRead.push(qrCodeId);
+        localStorage.setItem('qrCodesRead', JSON.stringify(qrCodesRead));
+    }
+}
+
+// Função para verificar se o QR Code foi lido
+function isQrCodeRead(qrCodeId) {
+    const qrCodesRead = JSON.parse(localStorage.getItem('qrCodesRead')) || [];
+    return qrCodesRead.includes(qrCodeId);
+}
+
 // Atualiza a barra de progresso ao carregar a página
 updateProgressBar();
 
-// Verifica o parâmetro da URL para aumentar o progresso
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('progress')) {
-    const progressIncrement = parseInt(urlParams.get('progress'));
-    if (progressIncrement) {
-        // Incrementa o progresso com base no valor obtido da URL
-        progress += progressIncrement;
-        // Armazena o progresso atualizado no localStorage
-        localStorage.setItem('progress', progress);
-        // Atualiza a barra de progresso com o novo valor
+// Verifica se algum QR Code foi lido e soma o progresso
+qrCodes.forEach(qrCode => {
+    if (isQrCodeRead(qrCode.id)) {
+        progress += qrCode.value; // Somar o valor correspondente ao QR Code lido
+    }
+});
+
+// Atualiza a barra de progresso com o progresso acumulado
+updateProgressBar();
+
+// Função para incrementar o progresso ao ler um QR Code
+function scanQRCode(qrCodeId) {
+    // Se o QR Code já foi lido, não faz nada
+    if (isQrCodeRead(qrCodeId)) return;
+
+    // Armazena o QR Code como lido
+    storeQrCodeRead(qrCodeId);
+
+    // Encontrar o QR Code e somar seu valor ao progresso
+    const qrCode = qrCodes.find(code => code.id === qrCodeId);
+    if (qrCode) {
+        progress += qrCode.value;
+        localStorage.setItem('progress', progress); // Armazenar o progresso atualizado
         updateProgressBar();
     }
 }
+
+// A função scanQRCode será chamada quando o QR Code for lido
+// Exemplo de como você pode chamar a função com o id do QR Code
+// scanQRCode('qr1'); // Chamaria quando o QR Code 1 fosse lido
