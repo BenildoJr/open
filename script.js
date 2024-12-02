@@ -1,20 +1,20 @@
 // Função para atualizar a barra de progresso com base na porcentagem
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    const progress = localStorage.getItem('progress') || 0; // Pega o progresso salvo no localStorage
-    progressBar.style.width = `${progress}%`; // Atualiza a largura da barra com o valor de progresso
-    progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
+    const progress = localStorage.getItem('progress') || 0;
+    progressBar.style.width = `${progress}%`;
+    progressBar.setAttribute('aria-valuenow', progress);
 }
 
 // Função para atualizar o estado de cada botão
 function updateButtonState(buttonId, isClicked) {
     const button = document.getElementById(buttonId);
     if (isClicked) {
-        button.disabled = true; // Desabilita o botão
-        button.style.backgroundColor = '#ccc'; // Muda a cor de fundo para indicar que está desabilitado
+        button.disabled = true;
+        button.style.backgroundColor = '#ccc';
     } else {
-        button.disabled = false; // Habilita o botão
-        button.style.backgroundColor = '#4caf50'; // Restaura a cor de fundo do botão
+        button.disabled = false;
+        button.style.backgroundColor = '#4caf50';
     }
 }
 
@@ -22,9 +22,9 @@ function updateButtonState(buttonId, isClicked) {
 function handleButtonClick(buttonId) {
     const currentProgress = parseInt(localStorage.getItem('progress') || 0);
     if (currentProgress < 100) {
-        const newProgress = currentProgress + 20; // A cada clique, a barra sobe 20%
-        localStorage.setItem('progress', newProgress); // Salva o novo valor de progresso
-        updateProgressBar(); // Atualiza a barra de progresso
+        const newProgress = currentProgress + 20;
+        localStorage.setItem('progress', newProgress);
+        updateProgressBar();
 
         // Marca o botão como clicado
         localStorage.setItem(buttonId, 'clicked');
@@ -33,7 +33,7 @@ function handleButtonClick(buttonId) {
 
     // Verifica se a barra de progresso está completa
     if (parseInt(localStorage.getItem('progress') || 0) === 100) {
-        enableVotingButton(); // Habilita o botão de votação
+        enableVotingButton();
     }
 }
 
@@ -41,25 +41,18 @@ function handleButtonClick(buttonId) {
 function enableVotingButton() {
     const votingButton = document.getElementById('votingBtn');
     votingButton.disabled = false;
-    votingButton.style.backgroundColor = '#2196f3'; // Muda a cor para azul quando habilitado
+    votingButton.style.backgroundColor = '#2196f3';
 }
 
 // Função para reiniciar o progresso
 function resetProgress() {
-    localStorage.setItem('progress', 0); // Zera o progresso
-    updateProgressBar(); // Atualiza a barra de progresso
-    localStorage.removeItem('button1');
-    localStorage.removeItem('button2');
-    localStorage.removeItem('button3');
-    localStorage.removeItem('button4');
-    localStorage.removeItem('button5');
-    
-    // Reabilita todos os botões
+    localStorage.setItem('progress', 0);
+    updateProgressBar();
     for (let i = 1; i <= 5; i++) {
+        localStorage.removeItem(`button${i}`);
         updateButtonState(`button${i}`, false);
     }
 
-    // Desabilita o botão de votação
     const votingButton = document.getElementById('votingBtn');
     votingButton.disabled = true;
     votingButton.style.backgroundColor = '#ccc';
@@ -74,7 +67,6 @@ function handleQRCodeScan(buttonId) {
 
 // Verifica o estado dos botões ao carregar a página
 function initialize() {
-    // Atualiza a barra de progresso
     updateProgressBar();
 
     // Verifica o estado de cada botão
@@ -86,6 +78,13 @@ function initialize() {
     // Habilita o botão de votação se o progresso for 100%
     if (parseInt(localStorage.getItem('progress') || 0) === 100) {
         enableVotingButton();
+    }
+
+    // Verifica se há um hash na URL (ex: #button1)
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#button')) {
+        const buttonId = hash.substring(1); // Remove o '#' do hash
+        handleQRCodeScan(buttonId); // Aciona o botão correspondente
     }
 }
 
