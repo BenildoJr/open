@@ -1,8 +1,8 @@
 // Função para atualizar a barra de progresso com base na porcentagem
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    const progress = localStorage.getItem('progress') || 0;  // Pega o progresso salvo no localStorage
-    progressBar.style.width = `${progress}%`;  // Atualiza a largura da barra com o valor de progresso
+    const progress = localStorage.getItem('progress') || 0; // Pega o progresso salvo no localStorage
+    progressBar.style.width = `${progress}%`; // Atualiza a largura da barra com o valor de progresso
     progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
 }
 
@@ -10,7 +10,7 @@ function updateProgressBar() {
 function updateButtonState(buttonId, isClicked) {
     const button = document.getElementById(buttonId);
     if (isClicked) {
-        button.disabled = true;  // Desabilita o botão
+        button.disabled = true; // Desabilita o botão
         button.style.backgroundColor = '#ccc'; // Muda a cor de fundo para indicar que está desabilitado
     } else {
         button.disabled = false; // Habilita o botão
@@ -33,7 +33,7 @@ function handleButtonClick(buttonId) {
 
     // Verifica se a barra de progresso está completa
     if (parseInt(localStorage.getItem('progress') || 0) === 100) {
-        enableVotingButton();  // Habilita o botão de votação
+        enableVotingButton(); // Habilita o botão de votação
     }
 }
 
@@ -46,8 +46,8 @@ function enableVotingButton() {
 
 // Função para reiniciar o progresso
 function resetProgress() {
-    localStorage.setItem('progress', 0);  // Zera o progresso
-    updateProgressBar();  // Atualiza a barra de progresso
+    localStorage.setItem('progress', 0); // Zera o progresso
+    updateProgressBar(); // Atualiza a barra de progresso
     localStorage.removeItem('button1');
     localStorage.removeItem('button2');
     localStorage.removeItem('button3');
