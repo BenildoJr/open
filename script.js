@@ -67,18 +67,6 @@ function scanQRCode(qrCodeId) {
     }
 }
 
-// Função para resetar o progresso e os QR Codes lidos
-function resetProgress() {
-    localStorage.removeItem('progress'); // Remove o progresso armazenado
-    localStorage.removeItem('qrCodesRead'); // Remove os QR Codes lidos
-    progress = 0; // Reinicia o progresso
-    updateProgressBar(); // Atualiza a barra de progresso para 0%
-    votingBtn.disabled = true; // Desabilita o botão de votação
-}
-
 // A função scanQRCode será chamada quando o QR Code for lido
 // Exemplo de como você pode chamar a função com o id do QR Code
 // scanQRCode('qr1'); // Chamaria quando o QR Code 1 fosse lido
-
-// Adicionando o evento de click para o botão de reset
-document.getElementById('resetBtn').addEventListener('click', resetProgress);
