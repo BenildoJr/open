@@ -21,11 +21,8 @@ body {
 .container {
     text-align: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1200px; 
     padding: 20px;
-    border: 2px solid #4caf50; /* Borda verde fina */
-    border-radius: 15px; /* Cantos arredondados */
-    background-color: #e8f5e9; /* Fundo verde claro */
 }
 
 h1 {
@@ -37,17 +34,16 @@ h1 {
 /* Barra de Progresso */
 .progress-container {
     width: 100%;
-    height: 40px; /* Dobrado de 20px para 40px */
-    background-color: #80e27e; /* Verde claro */
+    height: 30px; /* Ajustei a altura para dar mais destaque */
+    background-color: #ddd;
     margin-bottom: 30px;
     border-radius: 15px;
-    border: 2px solid #4caf50; /* Borda verde fina */
 }
 
 .progress-bar {
     height: 100%;
     width: 0%;
-    background-color: #4caf50; /* Verde padrão */
+    background-color: #4caf50;
     border-radius: 15px;
     transition: width 0.5s ease-in-out;
 }
@@ -57,17 +53,17 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     margin-top: 20px;
 }
 
 .buttons .progress-btn {
-    padding: 7px;
-    font-size: 0.9em;
-    width: 100px;
+    padding: 15px;
+    font-size: 1.2em;
+    width: 200px;
     background-color: #4caf50;
     color: white;
-    border: 2px solid #4caf50; /* Borda verde fina */
+    border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -76,25 +72,15 @@ h1 {
 .buttons .progress-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-    border: 2px solid #ccc; /* Borda cinza quando desabilitado */
 }
 
 /* QR Codes */
 .qr-codes {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
     margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-.qr-code {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid #4caf50; /* Borda verde fina ao redor dos QR Codes */
-    border-radius: 10px;
-    padding: 10px; /* Espaçamento interno para os QR Codes */
 }
 
 .qr-code img {
@@ -113,11 +99,11 @@ h1 {
 }
 
 .reset-btn {
-    padding: 5px 10px;
-    font-size: 0.9em;
+    padding: 10px 20px;
+    font-size: 1em;
     background-color: #f44336;
     color: white;
-    border: 2px solid #f44336; /* Borda verde fina */
+    border: none;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -128,11 +114,11 @@ h1 {
 }
 
 .voting-btn {
-    padding: 7px 15px;
-    font-size: 0.9em;
+    padding: 15px 30px;
+    font-size: 1.2em;
     background-color: #2196f3;
     color: white;
-    border: 2px solid #2196f3; /* Borda verde fina */
+    border: none;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -140,7 +126,6 @@ h1 {
 .voting-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-    border: 2px solid #ccc; /* Borda cinza quando desabilitado */
 }
 
 /* Responsividade */
@@ -154,23 +139,17 @@ h1 {
     }
 
     .progress-container {
-        height: 15px;
-    }
-
-    .progress-bar {
-        border-radius: 10px;
+        height: 25px; /* Ajustado para telas pequenas */
     }
 
     .buttons .progress-btn {
-        width: 80px;
-        font-size: 0.8em;
-        padding: 5px;
+        width: 100%; /* Botões ocupam toda a largura disponível */
+        font-size: 1em;
     }
 
     .qr-codes {
-        flex-direction: row;
-        justify-content: center;
-        gap: 10px;
+        flex-direction: column;
+        align-items: center;
     }
 
     .qr-code img {
@@ -179,6 +158,6 @@ h1 {
     }
 
     .reset-btn, .voting-btn {
-        width: 100%;
+        width: 100%; /* Botões ocupam toda a largura disponível */
     }
 }

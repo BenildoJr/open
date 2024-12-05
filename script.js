@@ -1,8 +1,8 @@
 // Função para atualizar a barra de progresso com base na porcentagem
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    const progress = localStorage.getItem('progress') || 0;  // Pega o progresso salvo no localStorage
-    progressBar.style.width = `${progress}%`;  // Atualiza a largura da barra com o valor de progresso
+    const progress = localStorage.getItem('progress') || 0; // Pega o progresso salvo no localStorage
+    progressBar.style.width = `${progress}%`; // Atualiza a largura da barra com o valor de progresso
     progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
 }
 
@@ -10,7 +10,7 @@ function updateProgressBar() {
 function updateButtonState(buttonId, isClicked) {
     const button = document.getElementById(buttonId);
     if (isClicked) {
-        button.disabled = true;  // Desabilita o botão
+        button.disabled = true; // Desabilita o botão
         button.style.backgroundColor = '#ccc'; // Muda a cor de fundo para indicar que está desabilitado
     } else {
         button.disabled = false; // Habilita o botão
@@ -33,7 +33,7 @@ function handleButtonClick(buttonId) {
 
     // Verifica se a barra de progresso está completa
     if (parseInt(localStorage.getItem('progress') || 0) === 100) {
-        enableVotingButton();  // Habilita o botão de votação
+        enableVotingButton(); // Habilita o botão de votação
     }
 }
 
@@ -46,8 +46,8 @@ function enableVotingButton() {
 
 // Função para reiniciar o progresso
 function resetProgress() {
-    localStorage.setItem('progress', 0);  // Zera o progresso
-    updateProgressBar();  // Atualiza a barra de progresso
+    localStorage.setItem('progress', 0); // Zera o progresso
+    updateProgressBar(); // Atualiza a barra de progresso
     localStorage.removeItem('button1');
     localStorage.removeItem('button2');
     localStorage.removeItem('button3');
@@ -68,7 +68,7 @@ function resetProgress() {
 // Função para simular o clique do botão através do QR code
 function handleQRCodeScan(buttonId) {
     if (!localStorage.getItem(buttonId)) {
-        handleButtonClick(buttonId); // Aumenta o progresso se o QR Code não tiver sido lido
+        handleButtonClick(buttonId);
     }
 }
 
@@ -86,37 +86,6 @@ function initialize() {
     // Habilita o botão de votação se o progresso for 100%
     if (parseInt(localStorage.getItem('progress') || 0) === 100) {
         enableVotingButton();
-    }
-}
-// Inicializa o progresso da barra de progresso
-let progress = localStorage.getItem('progress') ? parseInt(localStorage.getItem('progress')) : 0;
-const progressBar = document.getElementById('progressBar');
-const votingBtn = document.getElementById('votingBtn');
-
-// Função para atualizar a barra de progresso
-function updateProgressBar() {
-    progressBar.style.width = progress + '%';
-    progressBar.setAttribute('aria-valuenow', progress);
-    // Verifica se o progresso atingiu 100% e habilita o botão de votação
-    if (progress >= 100) {
-        votingBtn.disabled = false; // Habilita o botão de votação
-    }
-}
-
-// Atualiza a barra de progresso ao carregar a página
-updateProgressBar();
-
-// Verifica o parâmetro da URL para aumentar o progresso
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('progress')) {
-    const progressIncrement = parseInt(urlParams.get('progress'));
-    if (progressIncrement) {
-        // Incrementa o progresso com base no valor obtido da URL
-        progress += progressIncrement;
-        // Armazena o progresso atualizado no localStorage
-        localStorage.setItem('progress', progress);
-        // Atualiza a barra de progresso com o novo valor
-        updateProgressBar();
     }
 }
 
@@ -140,10 +109,3 @@ document.getElementById('resetBtn').addEventListener('click', resetProgress);
 
 // Adiciona o ouvinte de evento para o botão de votação
 document.getElementById('votingBtn').addEventListener('click', vote);
-
-// Adiciona ouvintes de evento para os QR Codes
-document.getElementById('qr1').addEventListener('click', () => handleQRCodeScan('button1'));
-document.getElementById('qr2').addEventListener('click', () => handleQRCodeScan('button2'));
-document.getElementById('qr3').addEventListener('click', () => handleQRCodeScan('button3'));
-document.getElementById('qr4').addEventListener('click', () => handleQRCodeScan('button4'));
-document.getElementById('qr5').addEventListener('click', () => handleQRCodeScan('button5'));
