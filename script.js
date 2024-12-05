@@ -1,7 +1,7 @@
 // Função para atualizar a barra de progresso com base na porcentagem
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    const progress = parseInt(localStorage.getItem('progress') || 0); // Pega o progresso salvo no localStorage
+    const progress = localStorage.getItem('progress') || 0; // Pega o progresso salvo no localStorage
     progressBar.style.width = `${progress}%`; // Atualiza a largura da barra com o valor de progresso
     progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
 }
@@ -48,10 +48,15 @@ function enableVotingButton() {
 function resetProgress() {
     localStorage.setItem('progress', 0); // Zera o progresso
     updateProgressBar(); // Atualiza a barra de progresso
-    // Remove os estados dos botões
+    localStorage.removeItem('button1');
+    localStorage.removeItem('button2');
+    localStorage.removeItem('button3');
+    localStorage.removeItem('button4');
+    localStorage.removeItem('button5');
+    
+    // Reabilita todos os botões
     for (let i = 1; i <= 5; i++) {
-        localStorage.removeItem(`button${i}`);
-        updateButtonState(`button${i}`, false); // Reabilita todos os botões
+        updateButtonState(`button${i}`, false);
     }
 
     // Desabilita o botão de votação
@@ -60,15 +65,18 @@ function resetProgress() {
     votingButton.style.backgroundColor = '#ccc';
 }
 
-// Função para simular o clique do botão através do QR code
-function handleQRCodeScan(buttonId) {
-    if (!localStorage.getItem(buttonId)) {
-        handleButtonClick(buttonId);
-    }
+// Função para redirecionar para o formulário de votação do Google Forms
+function vote() {
+    window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfkABb7ihtrT19LHMEqOy4vVXWpfGF7Fd2w-gmBxqKadJvHQA/viewform';
 }
 
-// Verifica o estado dos botões ao carregar a página
-function initialize() {
+// Função para acessar a página de QR Codes
+document.getElementById('qrcodesBtn').addEventListener('click', function() {
+    window.location.href = 'qrcodes.html';
+});
+
+// Inicializa a página ao carregar
+window.onload = function() {
     // Atualiza a barra de progresso
     updateProgressBar();
 
@@ -82,15 +90,7 @@ function initialize() {
     if (parseInt(localStorage.getItem('progress') || 0) === 100) {
         enableVotingButton();
     }
-}
-
-// Função para redirecionar para o formulário de votação do Google Forms
-function vote() {
-    window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfkABb7ihtrT19LHMEqOy4vVXWpfGF7Fd2w-gmBxqKadJvHQA/viewform';
-}
-
-// Inicializa a página ao carregar
-window.onload = initialize;
+};
 
 // Adiciona os ouvintes de evento para os botões
 document.getElementById('button1').addEventListener('click', () => handleButtonClick('button1'));
@@ -104,15 +104,3 @@ document.getElementById('resetBtn').addEventListener('click', resetProgress);
 
 // Adiciona o ouvinte de evento para o botão de votação
 document.getElementById('votingBtn').addEventListener('click', vote);
-
-// Verifica o parâmetro da URL para ajustar o progresso
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('progress')) {
-    const progressIncrement = parseInt(urlParams.get('progress'));
-    let progress = parseInt(localStorage.getItem('progress') || 0);
-    if (progressIncrement && progress < 100) {
-        progress = Math.min(progress + progressIncrement, 100); // Limita o progresso a 100%
-        localStorage.setItem('progress', progress); // Salva no localStorage
-        updateProgressBar();
-    }
-}

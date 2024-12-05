@@ -81,7 +81,7 @@ h3 {
     cursor: not-allowed;
 }
 
-/* QR Codes */
+/* QR Codes (Página de QR Codes) */
 .qr-codes {
     display: flex;
     justify-content: center;
@@ -100,6 +100,21 @@ h3 {
 
 .qr-code img:hover {
     transform: scale(1.1);
+}
+
+/* Botão de Voltar */
+.qrcodes-back-container {
+    margin-top: 20px;
+}
+
+.qrcodes-back-btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Botão de Reset */
@@ -168,5 +183,9 @@ h3 {
 
     .reset-btn, .voting-btn {
         width: 100%; /* Botões ocupam toda a largura disponível */
+    }
+
+    .qrcodes-back-btn {
+        width: 100%; /* O botão "Voltar" ocupa toda a largura disponível */
     }
 }
