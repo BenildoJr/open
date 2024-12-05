@@ -1,7 +1,7 @@
 // Função para atualizar a barra de progresso com base na porcentagem
 function updateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    const progress = localStorage.getItem('progress') || 0; // Pega o progresso salvo no localStorage
+    const progress = parseInt(localStorage.getItem('progress') || 0); // Pega o progresso salvo no localStorage
     progressBar.style.width = `${progress}%`; // Atualiza a largura da barra com o valor de progresso
     progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
 }
@@ -48,15 +48,10 @@ function enableVotingButton() {
 function resetProgress() {
     localStorage.setItem('progress', 0); // Zera o progresso
     updateProgressBar(); // Atualiza a barra de progresso
-    localStorage.removeItem('button1');
-    localStorage.removeItem('button2');
-    localStorage.removeItem('button3');
-    localStorage.removeItem('button4');
-    localStorage.removeItem('button5');
-    
-    // Reabilita todos os botões
+    // Remove os estados dos botões
     for (let i = 1; i <= 5; i++) {
-        updateButtonState(`button${i}`, false);
+        localStorage.removeItem(`button${i}`);
+        updateButtonState(`button${i}`, false); // Reabilita todos os botões
     }
 
     // Desabilita o botão de votação
@@ -109,3 +104,15 @@ document.getElementById('resetBtn').addEventListener('click', resetProgress);
 
 // Adiciona o ouvinte de evento para o botão de votação
 document.getElementById('votingBtn').addEventListener('click', vote);
+
+// Verifica o parâmetro da URL para ajustar o progresso
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('progress')) {
+    const progressIncrement = parseInt(urlParams.get('progress'));
+    let progress = parseInt(localStorage.getItem('progress') || 0);
+    if (progressIncrement && progress < 100) {
+        progress = Math.min(progress + progressIncrement, 100); // Limita o progresso a 100%
+        localStorage.setItem('progress', progress); // Salva no localStorage
+        updateProgressBar();
+    }
+}
