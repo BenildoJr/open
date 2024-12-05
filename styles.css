@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #2b2e2e;
     flex-direction: column;
     padding: 20px;
     width: 100%;
@@ -28,8 +28,15 @@ body {
 h1 {
     margin-bottom: 20px;
     font-size: 1.8em;
-    color: #333;
+    color: #f5f3f3;
 }
+
+h3 {
+    color: #ffffff; 
+    text-align: center;
+    margin-bottom: 20px; 
+}
+
 
 /* Barra de Progresso */
 .progress-container {
@@ -87,6 +94,8 @@ h1 {
     width: 120px;
     height: 120px;
     transition: transform 0.3s;
+    border: 2px solid #4caf50; 
+    border-radius: 10px; 
 }
 
 .qr-code img:hover {
