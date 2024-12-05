@@ -6,13 +6,6 @@ function updateProgressBar() {
     progressBar.setAttribute('aria-valuenow', progress); // Atualiza o valor no atributo 'aria-valuenow'
 }
 
-// Função para mostrar a mensagem de aviso
-function showWarningMessage(message) {
-    const warningMessage = document.getElementById('warningMessage');
-    warningMessage.textContent = message;
-    warningMessage.style.display = 'block'; // Exibe a mensagem de aviso
-}
-
 // Função para atualizar o estado de cada botão
 function updateButtonState(buttonId, isClicked) {
     const button = document.getElementById(buttonId);
@@ -28,40 +21,19 @@ function updateButtonState(buttonId, isClicked) {
 // Função para registrar a ação de um botão
 function handleButtonClick(buttonId) {
     const currentProgress = parseInt(localStorage.getItem('progress') || 0);
-    const progress = currentProgress || 0;
-
-    // Verifica se o QR Code anterior foi lido
-    if (buttonId === 'button2' && !localStorage.getItem('button1')) {
-        showWarningMessage('Você deve ler o QR Code da Sala 1 antes da Sala 2.');
-        return;
-    }
-    if (buttonId === 'button3' && !localStorage.getItem('button2')) {
-        showWarningMessage('Você deve ler o QR Code da Sala 2 antes da Sala 3.');
-        return;
-    }
-    if (buttonId === 'button4' && !localStorage.getItem('button3')) {
-        showWarningMessage('Você deve ler o QR Code da Sala 3 antes da Sala 4.');
-        return;
-    }
-    if (buttonId === 'button5' && !localStorage.getItem('button4')) {
-        showWarningMessage('Você deve ler o QR Code da Sala 4 antes da Sala 5.');
-        return;
-    }
-
-    // Se o QR Code pode ser lido, atualiza o progresso
-    if (progress < 100) {
-        const newProgress = progress + 20; // A cada clique, a barra sobe 20%
+    if (currentProgress < 100) {
+        const newProgress = currentProgress + 20; // A cada clique, a barra sobe 20%
         localStorage.setItem('progress', newProgress); // Salva o novo valor de progresso
         updateProgressBar(); // Atualiza a barra de progresso
 
         // Marca o botão como clicado
         localStorage.setItem(buttonId, 'clicked');
         updateButtonState(buttonId, true);
+    }
 
-        // Verifica se a barra de progresso está completa
-        if (newProgress === 100) {
-            enableVotingButton(); // Habilita o botão de votação
-        }
+    // Verifica se a barra de progresso está completa
+    if (parseInt(localStorage.getItem('progress') || 0) === 100) {
+        enableVotingButton(); // Habilita o botão de votação
     }
 }
 
